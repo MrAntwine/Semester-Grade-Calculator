@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester Grade Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .grade-input {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Semester Grade Calculator</h1>
+    <p>Enter your grades (0-100) for each component:</p>
+    
+    <div id="gradeEntries">
+        <div class="grade-input">
+            3rd Nine Weeks Grade: <input type="number" id="thirdNine" class="grade" min="0" max="100"> 
+            (Weight: 3/7 ≈ 42.86%)
+        </div>
+        <div class="grade-input">
+            4th Nine Weeks Grade: <input type="number" id="fourthNine" class="grade" min="0" max="100"> 
+            (Weight: 3/7 ≈ 42.86%)
+        </div>
+        <div class="grade-input">
+            Semester Exam Grade: <input type="number" id="exam" class="grade" min="0" max="100"> 
+            (Weight: 1/7 ≈ 14.29%)
+        </div>
+    </div>
+    
+    <button onclick="calculateGrade()">Calculate Grade</button>
+    <div id="result"></div>
+
+    <script>
+        function calculateGrade() {
+            const thirdNine = document.getElementById('thirdNine').value;
+            const fourthNine = document.getElementById('fourthNine').value;
+            const exam = document.getElementById('exam').value;
+
+            // Check if all fields are filled
+            if (thirdNine === '' || fourthNine === '' || exam === '') {
+                document.getElementById('result').innerHTML = 
+                    'Please fill in all fields.';
+                return;
+            }
+
+            // Convert to numbers
+            const thirdGrade = parseFloat(thirdNine);
+            const fourthGrade = parseFloat(fourthNine);
+            const examGrade = parseFloat(exam);
+
+            // Validate grade ranges
+            if (thirdGrade < 0 || thirdGrade > 100 || 
+                fourthGrade < 0 || fourthGrade > 100 || 
+                examGrade < 0 || examGrade > 100) {
+                document.getElementById('result').innerHTML = 
+                    'Grades must be between 0 and 100.';
+                return;
+            }
+
+            // Calculate weighted grade (3/7 + 3/7 + 1/7)
+            const totalGrade = (thirdGrade * (3/7)) + 
+                             (fourthGrade * (3/7)) + 
+                             (examGrade * (1/7));
+
+            // Calculate letter grade
+            let letterGrade;
+            if (totalGrade >= 90) letterGrade = 'A';
+            else if (totalGrade >= 80) letterGrade = 'B';
+            else if (totalGrade >= 70) letterGrade = 'C';
+            else if (totalGrade >= 60) letterGrade = 'D';
+            else letterGrade = 'F';
+
+            document.getElementById('result').innerHTML = 
+                `Your semester grade is: ${totalGrade.toFixed(2)}% (${letterGrade})`;
+        }
+    </script>
+</body>
+</html>
